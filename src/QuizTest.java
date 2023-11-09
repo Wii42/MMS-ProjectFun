@@ -7,7 +7,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 
-
+/*very simple QuizTest not very sophisticated GUI but it seems to sort of work*/
 public class QuizTest extends JFrame implements ActionListener {
     JLabel label;
     JRadioButton[] radioButtons = new JRadioButton[5];
