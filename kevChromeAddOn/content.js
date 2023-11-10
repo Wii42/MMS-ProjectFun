@@ -1,6 +1,33 @@
+const textContainer = document.createElement("div");
+
+// Set the content of the div (text to be displayed)
+textContainer.textContent = "";
+// Set other attributes and styles as needed
+textContainer.setAttribute("id", "displayText");
+textContainer.style.position = "fixed";
+textContainer.style.top = "70px";
+textContainer.style.right = "100px";
+textContainer.style.zIndex = "10000";
+textContainer.style.background = "#000";
+textContainer.style.color = "#fff";
+textContainer.style.fontSize = "25px";
+textContainer.style.cursor = "pointer";
+textContainer.style.width = "300px";
+textContainer.style.height = "80px";
+textContainer.style.alignItems = "center";
+textContainer.style.justifyContent = "center";
+textContainer.style.display = "none";
+
+
+
+// Append the div element to the body or another container
+document.body.appendChild(textContainer);
+
+
+
 const button = document.createElement("button");
 button.id = "speechToTextButton";
-button.textContent = "Quassel Pro 720 🎙️";
+button.textContent = "🎙️";
 button.style.position = "fixed";
 button.style.top = "70px";
 button.style.right = "20px";
@@ -8,12 +35,20 @@ button.style.zIndex = "10000";
 button.style.background = "#000";
 button.style.color = "#fff";
 button.style.border = "none";
-button.style.width = "400px";
-button.style.height = "120px";
-button.style.fontSize = "24px";
+button.style.width = "80px";
+button.style.height = "80px";
+button.style.fontSize = "25px";
 button.style.cursor = "pointer";
-button.style.display = "none";
 document.body.appendChild(button);
+button.style.display = "none";
+console.log("buttoncreated");
+
+
+
+
+
+
+
 
 
 
@@ -31,6 +66,7 @@ button.addEventListener("click", (e) => {
 });
 
 function insertTextAtCursor(text) {
+    textContainer.textContent = text;
     console.log(text);
 
     //checks for the desired keywords
@@ -109,7 +145,7 @@ recognition.onresult = (event) => {
     console.log("end");
 
     const transcript = event.results[event.results.length - 1][0].transcript;
-    // Check if the send keyword is included
+    // Check if the send keyword is included, TODO remove this function, or adjust
     if (transcript.toLowerCase().includes("that's all.")) {
         const el = document.activeElement;
         const e = new KeyboardEvent("keydown", {
@@ -143,6 +179,7 @@ chrome.runtime.onMessage.addListener((request) => {
     }
 });
 function toggleRecognition() {
+    textContainer.style.display = "flex";
     console.log("toggle");
     if (!recognition.manualStop) {
         recognition.manualStop = true;
