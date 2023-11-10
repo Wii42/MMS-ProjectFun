@@ -15,6 +15,8 @@ button.style.cursor = "pointer";
 button.style.display = "none";
 document.body.appendChild(button);
 
+
+
 let activeElement;
 // Start or stop speech recognition
 button.addEventListener("mousedown", (event) => {
@@ -29,30 +31,35 @@ button.addEventListener("click", (e) => {
 });
 
 function insertTextAtCursor(text) {
-    //debug log
+    console.log(text);
+
+    //checks for the desired keywords
+
     if (text.includes("one")||text.includes("1")) {
         let option1 = document.querySelector("[data-testid='option-1']");
         option1.click();
     }
-    if (text.includes("two")||text.includes("2")) {
+    //checks also for to
+    else if (text.includes("two")||text.includes("2")||
+        text.includes("to")
+    ) {
         let option2 = document.querySelector("[data-testid='option-2']");
         option2.click();
     }
-    if (text.includes("three")||text.includes("3")) {
+    else if (text.includes("three")||text.includes("3")) {
         let option3 = document.querySelector("[data-testid='option-3']");
         option3.click();
     }
-    if (text.includes("four")||text.includes("4")) {
+    else if (text.includes("four")||text.includes("4")) {
         let option4 = document.querySelector("[data-testid='option-4']");
         option4.click();
     }
+    //continue or next for easy usablility
+    else if (text.includes("continue")||text.includes("next")) {
+        let continueButton = document.querySelector('[aria-label="Continue"]');
+        continueButton.click();
+    }
 
-    // const sectionToClick = document.getElementById("w1uwrq7e");
-    // if (sectionToClick) {
-    //     console.log("button 1 pressed");
-    //     const clickEvent = new Event("customClick");
-    //     sectionToClick.dispatchEvent(clickEvent);
-    // }
 
 
     const el = document.activeElement;
