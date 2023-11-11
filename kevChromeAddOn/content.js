@@ -1,7 +1,7 @@
-const textContainer = document.createElement("div");
+const textContainer = document.createElement("textContainer");
 
 // Set the content of the div (text to be displayed)
-textContainer.textContent = "I'm listening";
+textContainer.textContent = "I'm listening...";
 // Set other attributes and styles as needed
 textContainer.setAttribute("id", "displayText");
 textContainer.style.position = "fixed";
@@ -24,7 +24,7 @@ textContainer.style.display = "none";
 document.body.appendChild(textContainer);
 
 
-
+//Microphone button
 const button = document.createElement("button");
 button.id = "speechToTextButton";
 button.textContent = "🎙️";
@@ -41,11 +41,6 @@ button.style.fontSize = "25px";
 button.style.cursor = "pointer";
 document.body.appendChild(button);
 button.style.display = "none";
-console.log("buttoncreated");
-
-
-
-
 
 
 
@@ -65,64 +60,73 @@ button.addEventListener("click", (e) => {
     toggleRecognition();
 });
 
-function insertTextAtCursor(text) {
-    textContainer.textContent = text;
-    console.log(text);
-    //converting to lowerCase for easier matching
-        text = text.toLowerCase();
+/**
+ * Checks if there are any of the keywords in the text and presses the specific buttons
+ *
+ * @param text
+ */
 
+function pressButtons(text){
+
+    console.log(text);
+    text = text.toLowerCase();
     //checks for the desired keywords
     if (text.includes("one")||text.includes("1")) {
         let option1 = document.querySelector("[data-testid='option-1']");
+        text = "one";
         option1.click();
     }
     //checks also for to
     else if (text.includes("two")||text.includes("2")||
         text.includes("to")) {
         let option2 = document.querySelector("[data-testid='option-2']");
+        text = "two";
         option2.click();
     }
-
     else if (text.includes("three")||text.includes("3")) {
         let option3 = document.querySelector("[data-testid='option-3']");
+        text = "three";
         option3.click();
     }
-
-    else if (text.includes("four")||text.includes("4")) {
+    else if (text.includes("four")||text.includes("four")||text.includes("4")) {
         let option4 = document.querySelector("[data-testid='option-4']");
-        option4.click();
-    }
-    else if (text.includes("four")||text.includes("4")) {
-        let option4 = document.querySelector("[data-testid='option-4']");
+        text = "four";
         option4.click();
     }
     else if (text.includes("back")||text.includes("previous")) {
-
         let back = document.querySelector('[aria-label="Press this to study the previous card"]');
         back.click();
-        console.log("backButtonClicked");
-
     }
-
     //continue or next for easy usablility,
     else if (text.includes("continue")||text.includes("next")) {
         let continueButton = document.querySelector('[aria-label="Continue"]');
-        if (continueButton){
-            console.log("normalNext");
-        } else {
-            console.log("flashCardFlip");
-            let continueButton = document.querySelector('[aria-label="Press this to study the next card"]');
-            continueButton.click();
-        }
-        continueButton.click();
+        if (!continueButton) {
+            text = text + " is not an option at the moment";
+        } else continueButton.click();
     }
-
+    //flips the flashcard
     else if (text.includes("flip")){
         let continueButton = document.querySelector('div.o11g6ed5');
         continueButton.click();
     }
+    else {
+        text = "I'm sorry, what do you mean by: " + text + "?";
+        textContainer.textContent = text;
+        return;
+    }
 
-    const el = document.activeElement;
+    textContainer.textContent = text;
+
+}
+
+function insertTextAtCursor(text) {
+
+
+    pressButtons(text);
+
+    //Not needed at the moment
+
+    /*const el = document.activeElement;
     const tagName = el.tagName.toLowerCase();
 
     if (tagName === "input" || tagName === "textarea") {
@@ -148,13 +152,14 @@ function insertTextAtCursor(text) {
         selection.addRange(range);
     }
     // Make sure to trigger the website's own input listening events
+
     const inputEvent = new Event("input", { bubbles: true, cancelable: true });
     el.dispatchEvent(inputEvent);
     const changeEvent = new Event("change", {
         bubbles: true,
         cancelable: true,
     });
-    el.dispatchEvent(changeEvent);
+    el.dispatchEvent(changeEvent);*/
 }
 
 if (!window.recognition) {
@@ -165,6 +170,9 @@ recognition.interimResults = false;
 recognition.maxAlternatives = 1;
 recognition.continuous = true;
 
+
+
+
 recognition.onresult = (event) => {
     console.log("end");
 
@@ -172,6 +180,7 @@ recognition.onresult = (event) => {
     // Stop ends the recording
     if (transcript.toLowerCase().includes("stop")) {
         toggleRecognition();
+
         textContainer.textContent = "I'm ready again";
         return;
     }
@@ -195,17 +204,32 @@ chrome.runtime.onMessage.addListener((request) => {
     }
 });
 function toggleRecognition() {
+    //toggle between round and square shape of the button
+    if (button.style.borderRadius === "120px"){
+        button.style.borderRadius = "0";
+    } else{
+        button.style.borderRadius = "120px";
+    }
+    //On toggle the textContainer displays default message
+    textContainer.textContent = "I'm listening...";
+
 
     console.log("toggle");
     if (!recognition.manualStop) {
         recognition.manualStop = true;
         recognition.stop();
+        //Hides the textbox
         textContainer.style.display = "none";
         button.style.background = "#000";
     } else {
         recognition.manualStop = false;
         recognition.start();
+        //displays textContainer
         textContainer.style.display = "flex";
         button.style.background = "#f00";
     }
+
+
+
+
 }
