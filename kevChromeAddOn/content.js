@@ -1,7 +1,7 @@
 const textContainer = document.createElement("div");
 
 // Set the content of the div (text to be displayed)
-textContainer.textContent = "";
+textContainer.textContent = "I'm listening";
 // Set other attributes and styles as needed
 textContainer.setAttribute("id", "displayText");
 textContainer.style.position = "fixed";
@@ -68,35 +68,59 @@ button.addEventListener("click", (e) => {
 function insertTextAtCursor(text) {
     textContainer.textContent = text;
     console.log(text);
+    //converting to lowerCase for easier matching
+        text = text.toLowerCase();
 
     //checks for the desired keywords
-
     if (text.includes("one")||text.includes("1")) {
         let option1 = document.querySelector("[data-testid='option-1']");
         option1.click();
     }
     //checks also for to
     else if (text.includes("two")||text.includes("2")||
-        text.includes("to")
-    ) {
+        text.includes("to")) {
         let option2 = document.querySelector("[data-testid='option-2']");
         option2.click();
     }
+
     else if (text.includes("three")||text.includes("3")) {
         let option3 = document.querySelector("[data-testid='option-3']");
         option3.click();
+    }
+
+    else if (text.includes("four")||text.includes("4")) {
+        let option4 = document.querySelector("[data-testid='option-4']");
+        option4.click();
     }
     else if (text.includes("four")||text.includes("4")) {
         let option4 = document.querySelector("[data-testid='option-4']");
         option4.click();
     }
-    //continue or next for easy usablility
+    else if (text.includes("back")||text.includes("previous")) {
+
+        let back = document.querySelector('[aria-label="Press this to study the previous card"]');
+        back.click();
+        console.log("backButtonClicked");
+
+    }
+
+    //continue or next for easy usablility,
     else if (text.includes("continue")||text.includes("next")) {
         let continueButton = document.querySelector('[aria-label="Continue"]');
+        if (continueButton){
+            console.log("normalNext");
+        } else {
+            console.log("flashCardFlip");
+            let continueButton = document.querySelector('[aria-label="Press this to study the next card"]');
+            continueButton.click();
+        }
         continueButton.click();
     }
 
-
+    else if (text.includes("flip")){
+        let continueButton = document.querySelector('div.o11g6ed5');
+        continueButton.click();
+    }
 
     const el = document.activeElement;
     const tagName = el.tagName.toLowerCase();
@@ -145,23 +169,15 @@ recognition.onresult = (event) => {
     console.log("end");
 
     const transcript = event.results[event.results.length - 1][0].transcript;
-    // Check if the send keyword is included, TODO remove this function, or adjust
-    if (transcript.toLowerCase().includes("that's all.")) {
-        const el = document.activeElement;
-        const e = new KeyboardEvent("keydown", {
-            keyCode: 13,
-            bubbles: true,
-            cancelable: true,
-        });
-
-        el.dispatchEvent(e);
+    // Stop ends the recording
+    if (transcript.toLowerCase().includes("stop")) {
         toggleRecognition();
-
+        textContainer.textContent = "I'm ready again";
         return;
     }
-
     insertTextAtCursor(transcript);
 };
+
 
 recognition.onend = () => {
     console.log("done");
@@ -179,15 +195,17 @@ chrome.runtime.onMessage.addListener((request) => {
     }
 });
 function toggleRecognition() {
-    textContainer.style.display = "flex";
+
     console.log("toggle");
     if (!recognition.manualStop) {
         recognition.manualStop = true;
         recognition.stop();
+        textContainer.style.display = "none";
         button.style.background = "#000";
     } else {
         recognition.manualStop = false;
         recognition.start();
+        textContainer.style.display = "flex";
         button.style.background = "#f00";
     }
 }
