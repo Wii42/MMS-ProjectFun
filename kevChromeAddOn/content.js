@@ -97,12 +97,17 @@ function pressButtons(text){
         let back = document.querySelector('[aria-label="Press this to study the previous card"]');
         back.click();
     }
-    //continue or next for easy usablility,
+    //continue or next for easy usability,
     else if (text.includes("continue")||text.includes("next")) {
         let continueButton = document.querySelector('[aria-label="Continue"]');
+
+        if (!continueButton){
+            continueButton = document.querySelector('[aria-label="Press this to study the next card"]');
+        }
         if (!continueButton) {
             text = text + " is not an option at the moment";
         } else continueButton.click();
+
     }
     //flips the flashcard
     else if (text.includes("flip")){
@@ -121,9 +126,10 @@ function pressButtons(text){
 
 function insertTextAtCursor(text) {
 
-
+//only checks if the text is not empty
+if (text.length!==0) {
     pressButtons(text);
-
+}
     //Not needed at the moment
 
     /*const el = document.activeElement;
@@ -172,16 +178,16 @@ recognition.continuous = true;
 
 
 
-
+// Stop ends the recording
 recognition.onresult = (event) => {
     console.log("end");
 
     const transcript = event.results[event.results.length - 1][0].transcript;
-    // Stop ends the recording
+
     if (transcript.toLowerCase().includes("stop")) {
         toggleRecognition();
-
         textContainer.textContent = "I'm ready again";
+
         return;
     }
     insertTextAtCursor(transcript);
@@ -203,16 +209,10 @@ chrome.runtime.onMessage.addListener((request) => {
         toggleRecognition();
     }
 });
-function toggleRecognition() {
-    //toggle between round and square shape of the button
-    if (button.style.borderRadius === "120px"){
-        button.style.borderRadius = "0";
-    } else{
-        button.style.borderRadius = "120px";
-    }
-    //On toggle the textContainer displays default message
-    textContainer.textContent = "I'm listening...";
 
+function toggleRecognition() {
+
+    toggleButtons();
 
     console.log("toggle");
     if (!recognition.manualStop) {
@@ -227,6 +227,17 @@ function toggleRecognition() {
         //displays textContainer
         textContainer.style.display = "flex";
         button.style.background = "#f00";
+    }
+
+    function toggleButtons(){
+        //toggle between round and square shape of the button
+        if (button.style.borderRadius === "120px"){
+            button.style.borderRadius = "0";
+        } else{
+            button.style.borderRadius = "120px";
+        }
+        //On toggle the textContainer displays default message
+        textContainer.textContent = "I'm listening...";
     }
 
 
