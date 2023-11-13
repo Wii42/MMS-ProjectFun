@@ -19,7 +19,7 @@ recognition.continuous = true;
 
 //Displays the user text
 const textContainer = document.createElement("textContainer");
-textContainer.textContent = "I'm listening...";
+textContainer.textContent = "Choose Answer \"one\", \"two\", \"three\" or \"four\"";
 textContainer.setAttribute("id", "displayText");
 textContainer.style.position = "fixed";
 textContainer.style.top = "70px";
