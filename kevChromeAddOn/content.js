@@ -1,8 +1,25 @@
-const textContainer = document.createElement("textContainer");
+/**
+ * textContainer is used to display the user input
+ *
+ * button is used to toggle the speech regognition
+ *TODO figure out how classes work in javascript an refactor the code
+ *
+ * @type {HTMLElement}
+ */
 
-// Set the content of the div (text to be displayed)
+//creates speech recognition object
+
+if (!window.recognition) {
+    window.recognition = new webkitSpeechRecognition();
+}
+recognition.lang = "en-US";
+recognition.interimResults = false;
+recognition.maxAlternatives = 1;
+recognition.continuous = true;
+
+//Displays the user text
+const textContainer = document.createElement("textContainer");
 textContainer.textContent = "I'm listening...";
-// Set other attributes and styles as needed
 textContainer.setAttribute("id", "displayText");
 textContainer.style.position = "fixed";
 textContainer.style.top = "70px";
@@ -17,10 +34,6 @@ textContainer.style.height = "80px";
 textContainer.style.alignItems = "center";
 textContainer.style.justifyContent = "center";
 textContainer.style.display = "none";
-
-
-
-// Append the div element to the body or another container
 document.body.appendChild(textContainer);
 
 
@@ -39,14 +52,18 @@ button.style.width = "80px";
 button.style.height = "80px";
 button.style.fontSize = "25px";
 button.style.cursor = "pointer";
-document.body.appendChild(button);
+//TODO decide if the button should be a bit see thru
+// button.style.opacity = "0.6";
 button.style.display = "none";
+document.body.appendChild(button);
 
 
 
 
-
-
+/**
+ * I do not really understand this funktion
+ * @kev
+ */
 let activeElement;
 // Start or stop speech recognition
 button.addEventListener("mousedown", (event) => {
@@ -68,7 +85,9 @@ button.addEventListener("click", (e) => {
 
 function pressButtons(text){
 
+    //debug log
     console.log(text);
+
     text = text.toLowerCase();
     //checks for the desired keywords
     if (text.includes("one")||text.includes("1")) {
@@ -97,7 +116,7 @@ function pressButtons(text){
         let back = document.querySelector('[aria-label="Press this to study the previous card"]');
         back.click();
     }
-    //continue or next for easy usability,
+    //continue or next for easy usability, TODO Fix bug, that you can do next only twice in a row
     else if (text.includes("continue")||text.includes("next")) {
         let continueButton = document.querySelector('[aria-label="Continue"]');
 
@@ -107,32 +126,32 @@ function pressButtons(text){
         if (!continueButton) {
             text = text + " is not an option at the moment";
         } else continueButton.click();
-
     }
     //flips the flashcard
     else if (text.includes("flip")){
         let continueButton = document.querySelector('div.o11g6ed5');
         continueButton.click();
     }
+
+
     else {
         text = "I'm sorry, what do you mean by: " + text + "?";
         textContainer.textContent = text;
         return;
     }
 
+    //update textContainer to coresponding text
     textContainer.textContent = text;
 
 }
 
-function insertTextAtCursor(text) {
+//Old function to insert Text
+/*function insertTextAtCursor(text) {
 
-//only checks if the text is not empty
-if (text.length!==0) {
-    pressButtons(text);
 }
     //Not needed at the moment
 
-    /*const el = document.activeElement;
+    const el = document.activeElement;
     const tagName = el.tagName.toLowerCase();
 
     if (tagName === "input" || tagName === "textarea") {
@@ -165,17 +184,8 @@ if (text.length!==0) {
         bubbles: true,
         cancelable: true,
     });
-    el.dispatchEvent(changeEvent);*/
-}
-
-if (!window.recognition) {
-    window.recognition = new webkitSpeechRecognition();
-}
-recognition.lang = "en-US";
-recognition.interimResults = false;
-recognition.maxAlternatives = 1;
-recognition.continuous = true;
-
+    el.dispatchEvent(changeEvent);
+}*/
 
 
 // Stop ends the recording
@@ -187,10 +197,11 @@ recognition.onresult = (event) => {
     if (transcript.toLowerCase().includes("stop")) {
         toggleRecognition();
         textContainer.textContent = "I'm ready again";
-
         return;
     }
-    insertTextAtCursor(transcript);
+    if (transcript.length!==0) {
+        pressButtons(transcript);
+    }
 };
 
 
@@ -233,14 +244,15 @@ function toggleRecognition() {
         //toggle between round and square shape of the button
         if (button.style.borderRadius === "120px"){
             button.style.borderRadius = "0";
+
+
         } else{
             button.style.borderRadius = "120px";
+
         }
         //On toggle the textContainer displays default message
         textContainer.textContent = "I'm listening...";
     }
-
-
 
 
 }
