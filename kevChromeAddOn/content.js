@@ -1,8 +1,23 @@
 /**
  * textContainer is used to display the user input
  *
- * button is used to toggle the speech regognition
- *TODO figure out how classes work in javascript an refactor the code
+ * button is used to toggle the speech recognition
+ *
+ * Technical TODOs
+ * TODO bug, that you can call next only twice
+ * TODO bug, not recognizing the first word
+ * TODO bug, fast clicking the togglebutton causes layout misshape
+ * TODO add Logo
+ * TODO fix that text is bigger then textBox
+ *
+ * Program Design TODOs
+ * TODO difference between user and program text
+ * TODO how do users learn the program, maybe in description
+ *
+ *
+ *
+ *
+ *
  *
  * @type {HTMLElement}
  */
@@ -18,7 +33,7 @@ recognition.maxAlternatives = 1;
 recognition.continuous = true;
 
 //Displays the user text
-const textContainer = document.createElement("textContainer");
+const textContainer = document.createElement("textBox");
 textContainer.textContent = "I'm listening...";
 textContainer.setAttribute("id", "displayText");
 textContainer.style.position = "fixed";
@@ -37,6 +52,21 @@ textContainer.style.display = "none";
 document.body.appendChild(textContainer);
 
 
+function updateTextBoxText (newText){
+    textContainer.textContent = newText;
+}
+function textBoxStyleWhenMuted(){
+    textContainer.style.display = "none";
+    textContainer.style.display = "none";
+    button.style.background = "#000";
+}
+function textBoxStyleNotMuted(){
+    textContainer.style.display = "none";
+    textContainer.style.display = "flex";
+}
+
+
+
 //Microphone button
 const button = document.createElement("button");
 button.id = "speechToTextButton";
@@ -46,22 +76,51 @@ button.style.top = "70px";
 button.style.right = "20px";
 button.style.zIndex = "10000";
 button.style.background = "#000";
-button.style.color = "#fff";
 button.style.border = "none";
 button.style.width = "80px";
 button.style.height = "80px";
 button.style.fontSize = "25px";
 button.style.cursor = "pointer";
-//TODO decide if the button should be a bit see thru
-// button.style.opacity = "0.6";
+button.style.color = `rgba(0, 0, 0, 0.5)`;
 button.style.display = "none";
 document.body.appendChild(button);
+
+function buttonStyleMuted(){
+    button.style.color = `rgba(0, 0, 0, 0.5)`;
+    button.style.borderRadius = "120px";
+    button.style.background = "#000";
+
+}
+function buttonStyleNotMuted() {
+    button.style.borderRadius = "0";
+    button.style.background = "#f00";
+    button.style.color = `rgba(0, 0, 0, 1)`;
+}
+
+
+/**
+ * Toggles the Design of the buttons, depending on if the mic is muted or not
+ */
+function toggleButtons(){
+    //toggle between round and square shape of the button, uses the radius of the button to check
+    if (button.style.borderRadius === "120px"){
+        buttonStyleNotMuted();
+        textBoxStyleNotMuted();
+
+    } else{
+        buttonStyleMuted();
+        textBoxStyleWhenMuted();
+    }
+
+    //On toggle the textContainer displays default message
+    updateTextBoxText("I'm listening...");
+}
 
 
 
 
 /**
- * I do not really understand this funktion
+ * I do not understand this function
  * @kev
  */
 let activeElement;
@@ -119,13 +178,13 @@ function pressButtons(text){
     //continue or next for easy usability, TODO Fix bug, that you can do next only twice in a row
     else if (text.includes("continue")||text.includes("next")) {
         let continueButton = document.querySelector('[aria-label="Continue"]');
-
         if (!continueButton){
             continueButton = document.querySelector('[aria-label="Press this to study the next card"]');
         }
         if (!continueButton) {
             text = text + " is not an option at the moment";
         } else continueButton.click();
+
     }
     //flips the flashcard
     else if (text.includes("flip")){
@@ -136,11 +195,11 @@ function pressButtons(text){
 
     else {
         text = "I'm sorry, what do you mean by: " + text + "?";
-        textContainer.textContent = text;
+        updateTextBoxText(text);
         return;
     }
 
-    //update textContainer to coresponding text
+    //update textContainer to corresponding text
     textContainer.textContent = text;
 
 }
@@ -196,7 +255,6 @@ recognition.onresult = (event) => {
 
     if (transcript.toLowerCase().includes("stop")) {
         toggleRecognition();
-        textContainer.textContent = "I'm ready again";
         return;
     }
     if (transcript.length!==0) {
@@ -229,30 +287,13 @@ function toggleRecognition() {
     if (!recognition.manualStop) {
         recognition.manualStop = true;
         recognition.stop();
-        //Hides the textbox
-        textContainer.style.display = "none";
-        button.style.background = "#000";
+
+
     } else {
         recognition.manualStop = false;
         recognition.start();
-        //displays textContainer
-        textContainer.style.display = "flex";
-        button.style.background = "#f00";
     }
 
-    function toggleButtons(){
-        //toggle between round and square shape of the button
-        if (button.style.borderRadius === "120px"){
-            button.style.borderRadius = "0";
-
-
-        } else{
-            button.style.borderRadius = "120px";
-
-        }
-        //On toggle the textContainer displays default message
-        textContainer.textContent = "I'm listening...";
-    }
 
 
 }
