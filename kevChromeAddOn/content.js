@@ -56,9 +56,8 @@ function updateTextBoxText (newText){
     textContainer.textContent = newText;
 }
 function textBoxStyleWhenMuted(){
+    //Hides the textBox
     textContainer.style.display = "none";
-    textContainer.style.display = "none";
-    button.style.background = "#000";
 }
 function textBoxStyleNotMuted(){
     textContainer.style.display = "none";
@@ -75,26 +74,21 @@ button.style.position = "fixed";
 button.style.top = "70px";
 button.style.right = "20px";
 button.style.zIndex = "10000";
-button.style.background = "#000";
 button.style.border = "none";
 button.style.width = "80px";
 button.style.height = "80px";
 button.style.fontSize = "25px";
 button.style.cursor = "pointer";
-button.style.color = `rgba(0, 0, 0, 0.5)`;
 button.style.display = "none";
 document.body.appendChild(button);
 
 function buttonStyleMuted(){
-    button.style.color = `rgba(0, 0, 0, 0.5)`;
     button.style.borderRadius = "120px";
-    button.style.background = "#000";
-
+    button.style.background = "AliceBlue";
 }
 function buttonStyleNotMuted() {
     button.style.borderRadius = "0";
     button.style.background = "#f00";
-    button.style.color = `rgba(0, 0, 0, 1)`;
 }
 
 
