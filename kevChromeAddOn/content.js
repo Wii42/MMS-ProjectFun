@@ -15,10 +15,6 @@
  * TODO how do users learn the program, maybe in description
  *
  *
- *
- *
- *
- *
  * @type {HTMLElement}
  */
 
@@ -125,8 +121,7 @@ button.addEventListener("mousedown", (event) => {
 });
 button.addEventListener("click", (e) => {
     // chrome.runtime.sendMessage({ command: "toggleRecognition" });
-    // e.preventDefault();
-    //if (activeElement) activeElement.focus();
+    e.preventDefault();
     toggleRecognition();
 });
 
@@ -137,6 +132,11 @@ button.addEventListener("click", (e) => {
  */
 
 function pressButtons(text){
+    function notAndOption (userInput){
+        text = text + " is not an option at the moment";
+        textContainer.textContent = text;
+    }
+
 
     //debug log
     console.log(text);
@@ -145,25 +145,30 @@ function pressButtons(text){
     //checks for the desired keywords
     if (text.includes("one")||text.includes("1")) {
         let option1 = document.querySelector("[data-testid='option-1']");
-        text = "one";
-        option1.click();
+        if (option1) {text = "one";
+        option1.click();}
+        else notAndOption(text);
     }
     //checks also for to
     else if (text.includes("two")||text.includes("2")||
         text.includes("to")) {
         let option2 = document.querySelector("[data-testid='option-2']");
-        text = "two";
-        option2.click();
+        if (option2) {text = "two";
+            option2.click();}
+        else notAndOption(text);
+
     }
     else if (text.includes("three")||text.includes("3")) {
         let option3 = document.querySelector("[data-testid='option-3']");
-        text = "three";
-        option3.click();
+        if (option3) {text = "three";
+            option3.click();}
+        else notAndOption(text);
     }
     else if (text.includes("four")||text.includes("four")||text.includes("4")) {
         let option4 = document.querySelector("[data-testid='option-4']");
-        text = "four";
-        option4.click();
+        if (option4) {text = "four";
+            option4.click();}
+        else notAndOption(text);
     }
     else if (text.includes("back")||text.includes("previous")) {
         let back = document.querySelector('[aria-label="Press this to study the previous card"]');
@@ -178,7 +183,6 @@ function pressButtons(text){
         if (!continueButton) {
             text = text + " is not an option at the moment";
         } else continueButton.click();
-
     }
     //flips the flashcard
     else if (text.includes("flip")){
@@ -198,47 +202,7 @@ function pressButtons(text){
 
 }
 
-//Old function to insert Text
-/*function insertTextAtCursor(text) {
 
-}
-    //Not needed at the moment
-
-    const el = document.activeElement;
-    const tagName = el.tagName.toLowerCase();
-
-    if (tagName === "input" || tagName === "textarea") {
-        const start = el.selectionStart;
-        const end = el.selectionEnd;
-        const value = el.value;
-
-        el.value = value.slice(0, start) + text + value.slice(end);
-        el.selectionStart = el.selectionEnd = start + text.length;
-    } else if (
-        tagName === "div" &&
-        el.getAttribute("contenteditable") === "true"
-    ) {
-        const selection = window.getSelection();
-        const range = selection.getRangeAt(0);
-
-        range.deleteContents();
-        const textNode = document.createTextNode(text);
-        range.insertNode(textNode);
-        range.setStartAfter(textNode);
-        range.setEndAfter(textNode);
-        selection.removeAllRanges();
-        selection.addRange(range);
-    }
-    // Make sure to trigger the website's own input listening events
-
-    const inputEvent = new Event("input", { bubbles: true, cancelable: true });
-    el.dispatchEvent(inputEvent);
-    const changeEvent = new Event("change", {
-        bubbles: true,
-        cancelable: true,
-    });
-    el.dispatchEvent(changeEvent);
-}*/
 
 
 // Stop ends the recording
@@ -254,6 +218,7 @@ recognition.onresult = (event) => {
     if (transcript.length!==0) {
         pressButtons(transcript);
     }
+
 };
 
 
@@ -274,20 +239,14 @@ chrome.runtime.onMessage.addListener((request) => {
 });
 
 function toggleRecognition() {
-
     toggleButtons();
-
     console.log("toggle");
     if (!recognition.manualStop) {
         recognition.manualStop = true;
         recognition.stop();
-
-
     } else {
         recognition.manualStop = false;
         recognition.start();
     }
-
-
 
 }
