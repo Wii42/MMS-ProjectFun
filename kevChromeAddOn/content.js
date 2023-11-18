@@ -6,7 +6,6 @@
  * Technical TODOs
  * TODO bug, that you can call next only twice
  * TODO bug, not recognizing the first word
- * TODO bug, fast clicking the togglebutton causes layout misshape
  * TODO add Logo
  * TODO fix that text is bigger then textBox
  *
@@ -29,6 +28,7 @@ recognition.maxAlternatives = 1;
 recognition.continuous = true;
 
 
+
 //Displays the user text
 const textContainer = document.createElement("textBox");
 textContainer.textContent = "I'm listening...";
@@ -48,8 +48,8 @@ textContainer.style.justifyContent = "center";
 textContainer.style.display = "none";
 document.body.appendChild(textContainer);
 
-//displays a cat
-const cat = document.createElement("div");
+//displays a cat basic version
+/*const cat = document.createElement("div");
 cat.style.backgroundImage = "url('" + chrome.runtime.getURL('image/cat.png') + "')";
 cat.style.backgroundSize = "cover";
 cat.style.position = "absolute";
@@ -58,12 +58,39 @@ cat.style.top = "400px";
 cat.style.left = "20px";
 cat.style.width = "360px";
 cat.style.height = "360px";
-document.body.appendChild(cat);
+document.body.appendChild(cat);*/
+
+//creates the parent for all the cats
+var catParent = document.createElement("div");
+catParent.id = "cat";
+var countTheCats = 0;
+document.body.appendChild(catParent);
+
+function makeSeveralCats(numberOfCats){
+    for (let i = 0; i<numberOfCats;i++){
+        makeACat();
+    }
+}
+
+function makeACat(){
+    countTheCats++;
+    var cat = document.createElement("div");
+    cat.style.backgroundImage = "url('" + chrome.runtime.getURL('image/cat.png') + "')";
+    cat.style.backgroundSize = "cover";
+    cat.style.position = "absolute";
+    catParent.style.display = "block";
+    cat.style.top = "400px";
+    cat.style.left ="" + countTheCats*20 + "px";
+    cat.style.width = "" + 100 * countTheCats*0.2+ "px";
+    cat.style.height = "" + 100 * countTheCats*0.2+ "px";
+    //adds the cat to the parent
+    catParent.appendChild(cat);
+}
 
 
 
 /*
-Additional Textbox as speechbubble
+Additional Textbox as speech bubble
 
 // Create the speech bubble div
 var bubbleDiv = document.createElement("div");
@@ -183,7 +210,13 @@ button.addEventListener("click", (e) => {
  * @param text
  */
 
+
+//used to restart after a double recognition
+var lastWord = "";
+
 function pressButtons(text){
+
+    //private helper function
     function notAndOption (userInput){
         text = text + " is not an option at the moment";
         textContainer.textContent = text;
@@ -242,10 +275,10 @@ function pressButtons(text){
     }
     else if (text.includes("cat")||text.includes("cut")){
         text = "cat";
-        cat.style.display = "flex";
+         makeSeveralCats(8);
     }
     else if (text.includes("go away")){
-        cat.style.display = "none";
+        catParent.style.display = "none";
     }
     else {
         text = "I'm sorry, what do you mean by: " + text + "?";
@@ -253,8 +286,13 @@ function pressButtons(text){
         return;
     }
 
+
     //update textContainer to corresponding text
     textContainer.textContent = text;
+    if (text.includes(lastWord)) {
+        recognition.stop();
+    }
+    lastWord = text;
 
 }
 
