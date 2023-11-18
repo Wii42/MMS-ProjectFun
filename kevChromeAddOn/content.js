@@ -234,9 +234,7 @@ function pressButtons(text){
         toggleRecognition();
         return;
     }
-    //checks also for to
-    else if (text.includes("two")||text.includes("2")||
-        text.includes("to")) {
+    else if (text.includes("two")||text.includes("2")|| text.includes("to")) {
         let option2 = document.querySelector("[data-testid='option-2']");
         if (option2) {text = "two";
             option2.click();}
@@ -258,7 +256,7 @@ function pressButtons(text){
         let back = document.querySelector('[aria-label="Press this to study the previous card"]');
         back.click();
     }
-    //continue or next for easy usability, TODO Fix bug, that you can do next only twice in a row
+
     else if (text.includes("continue")||text.includes("next")) {
         let continueButton = document.querySelector('[aria-label="Continue"]');
         if (!continueButton){
@@ -281,6 +279,10 @@ function pressButtons(text){
         catParent.style.display = "none";
     }
     else {
+        //Cuts of the text if it's too long
+        if (text.length>=20){
+            text  = text.substring(0,17) + "...";
+        }
         text = "I'm sorry, what do you mean by: " + text + "?";
         updateTextBoxText(text);
         return;
@@ -289,29 +291,27 @@ function pressButtons(text){
 
     //update textContainer to corresponding text
     textContainer.textContent = text;
+    //restart recognition if a word is duplicated
     if (text.includes(lastWord)) {
+        //manual stop is not active, so it will restart the client
         recognition.stop();
     }
+
     lastWord = text;
 
 }
 
 
 
-
-
 recognition.onresult = (event) => {
     console.log("Event triggered");
-
     const transcript = event.results[event.results.length - 1][0].transcript;
     console.log(transcript);
-
     if (transcript.length!==0) {
         pressButtons(transcript);
     }
 
 };
-
 
 recognition.onend = () => {
     console.log("done");
@@ -328,6 +328,7 @@ chrome.runtime.onMessage.addListener((request) => {
         toggleRecognition();
     }
 });
+
 
 function toggleRecognition() {
     toggleButtons();
