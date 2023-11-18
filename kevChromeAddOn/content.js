@@ -28,6 +28,7 @@ recognition.interimResults = false;
 recognition.maxAlternatives = 1;
 recognition.continuous = true;
 
+
 //Displays the user text
 const textContainer = document.createElement("textBox");
 textContainer.textContent = "I'm listening...";
@@ -46,6 +47,44 @@ textContainer.style.alignItems = "center";
 textContainer.style.justifyContent = "center";
 textContainer.style.display = "none";
 document.body.appendChild(textContainer);
+
+
+/*
+Additional Textbox as speechbubble
+
+// Create the speech bubble div
+var bubbleDiv = document.createElement("div");
+bubbleDiv.style.zIndex = "9999";
+bubbleDiv.style.position = "fixed";
+bubbleDiv.style.top = "170px";
+bubbleDiv.style.right = "20px";
+bubbleDiv.style.width = "360px";
+bubbleDiv.style.height = "100px";
+bubbleDiv.style.backgroundColor = "#FFCC00";
+bubbleDiv.style.border = "2px solid #999";
+bubbleDiv.style.borderRadius = "10px";
+bubbleDiv.style.padding = "10px";
+
+// Create the speech bubble tail
+var bubbleTail = document.createElement("div");
+bubbleTail.style.position = "absolute";
+bubbleTail.style.top = "-20px";
+bubbleTail.style.right = "20px";
+bubbleTail.style.borderLeft = "20px solid transparent";
+bubbleTail.style.borderRight = "20px solid transparent";
+bubbleTail.style.borderBottom = "20px solid #FFCC00";
+bubbleDiv.appendChild(bubbleTail);
+
+// Create the textarea
+var textArea = document.createElement("textarea");
+textArea.style.width = "100%";
+textArea.style.height = "80%";
+textArea.style.border = "none";
+textArea.style.backgroundColor = "#FFCC00";
+bubbleDiv.appendChild(textArea);
+
+// Add the speech bubble to the body
+document.body.appendChild(bubbleDiv);*/
 
 
 function updateTextBoxText (newText){
@@ -137,10 +176,6 @@ function pressButtons(text){
         textContainer.textContent = text;
     }
 
-
-    //debug log
-    console.log(text);
-
     text = text.toLowerCase();
     //checks for the desired keywords
     if (text.includes("one")||text.includes("1")) {
@@ -149,6 +184,10 @@ function pressButtons(text){
         option1.click();}
         else notAndOption(text);
     }
+    else if (text.includes("stop")) {
+        toggleRecognition();
+        return;
+    }
     //checks also for to
     else if (text.includes("two")||text.includes("2")||
         text.includes("to")) {
@@ -156,7 +195,6 @@ function pressButtons(text){
         if (option2) {text = "two";
             option2.click();}
         else notAndOption(text);
-
     }
     else if (text.includes("three")||text.includes("3")) {
         let option3 = document.querySelector("[data-testid='option-3']");
@@ -164,7 +202,7 @@ function pressButtons(text){
             option3.click();}
         else notAndOption(text);
     }
-    else if (text.includes("four")||text.includes("four")||text.includes("4")) {
+    else if (text.includes("four")||text.includes("for")||text.includes("4")) {
         let option4 = document.querySelector("[data-testid='option-4']");
         if (option4) {text = "four";
             option4.click();}
@@ -178,7 +216,7 @@ function pressButtons(text){
     else if (text.includes("continue")||text.includes("next")) {
         let continueButton = document.querySelector('[aria-label="Continue"]');
         if (!continueButton){
-            continueButton = document.querySelector('[aria-label="Press this to study the next card"]');
+            continueButton = document.querySelector(".c1myr3p4 > div > div:nth-child(2) > button");
         }
         if (!continueButton) {
             text = text + " is not an option at the moment";
@@ -189,7 +227,6 @@ function pressButtons(text){
         let continueButton = document.querySelector('div.o11g6ed5');
         continueButton.click();
     }
-
 
     else {
         text = "I'm sorry, what do you mean by: " + text + "?";
@@ -205,16 +242,13 @@ function pressButtons(text){
 
 
 
-// Stop ends the recording
+
 recognition.onresult = (event) => {
-    console.log("end");
+    console.log("Event triggered");
 
     const transcript = event.results[event.results.length - 1][0].transcript;
+    console.log(transcript);
 
-    if (transcript.toLowerCase().includes("stop")) {
-        toggleRecognition();
-        return;
-    }
     if (transcript.length!==0) {
         pressButtons(transcript);
     }
@@ -228,7 +262,7 @@ recognition.onend = () => {
         setTimeout(() => {
             recognition.start();
             console.log("restarted");
-        }, 100);
+        }, 10);
     }
 };
 
