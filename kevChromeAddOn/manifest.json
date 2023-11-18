@@ -3,7 +3,7 @@
   "name": "Quassel",
   "version": "1.0",
   "description": "Control Quizlet with voice command",
-  "permissions": ["activeTab", "scripting"],
+  "permissions": ["activeTab", "scripting","nativeMessaging"],
   "action": {
     "default_title": "Toggle Speech to Text"
   },
@@ -23,5 +23,11 @@
   ],
   "background": {
     "service_worker": "background.js"
-  }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["/image/cat.png"],
+      "matches": [ "https://*/*" ]
+    }
+  ]
 }

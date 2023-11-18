@@ -48,6 +48,19 @@ textContainer.style.justifyContent = "center";
 textContainer.style.display = "none";
 document.body.appendChild(textContainer);
 
+//displays a cat
+const cat = document.createElement("div");
+cat.style.backgroundImage = "url('" + chrome.runtime.getURL('image/cat.png') + "')";
+cat.style.backgroundSize = "cover";
+cat.style.position = "absolute";
+cat.style.display = "none";
+cat.style.top = "400px";
+cat.style.left = "20px";
+cat.style.width = "360px";
+cat.style.height = "360px";
+document.body.appendChild(cat);
+
+
 
 /*
 Additional Textbox as speechbubble
@@ -227,7 +240,13 @@ function pressButtons(text){
         let continueButton = document.querySelector('div.o11g6ed5');
         continueButton.click();
     }
-
+    else if (text.includes("cat")||text.includes("cut")){
+        text = "cat";
+        cat.style.display = "flex";
+    }
+    else if (text.includes("go away")){
+        cat.style.display = "none";
+    }
     else {
         text = "I'm sorry, what do you mean by: " + text + "?";
         updateTextBoxText(text);
