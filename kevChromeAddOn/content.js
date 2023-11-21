@@ -46,7 +46,27 @@ textContainer.style.height = "80px";
 textContainer.style.alignItems = "center";
 textContainer.style.justifyContent = "center";
 textContainer.style.display = "none";
+textContainer.style.padding = "10px"
 document.body.appendChild(textContainer);
+
+const descriptionContainer = document.createElement("textBox");
+descriptionContainer.textContent = "";
+descriptionContainer.setAttribute("id2", "displayText2");
+descriptionContainer.style.position = "fixed";
+descriptionContainer.style.top = "150px";
+descriptionContainer.style.right = "20px";
+descriptionContainer.style.zIndex = "9999";
+descriptionContainer.style.background = "#333";
+descriptionContainer.style.color = "#fff";
+descriptionContainer.style.fontSize = "16px";
+descriptionContainer.style.cursor = "pointer";
+descriptionContainer.style.width = "380px";
+descriptionContainer.style.height = "auto";
+descriptionContainer.style.alignItems = "center";
+descriptionContainer.style.justifyContent = "start";
+descriptionContainer.style.display = "none";
+descriptionContainer.style.padding = "10px"
+document.body.appendChild(descriptionContainer);
 
 //displays a cat basic version
 /*const cat = document.createElement("div");
@@ -139,6 +159,26 @@ function textBoxStyleNotMuted(){
     textContainer.style.display = "flex";
 }
 
+function updateDescriptionBoxText (newText){
+    descriptionContainer.textContent = newText;
+}
+function descriptionBoxStyleWhenMuted(){
+    //Hides the textBox
+    descriptionContainer.style.display = "none";
+}
+
+function descriptionBoxStyleNotMuted(){
+    descriptionContainer.style.display = "none";
+    descriptionContainer.style.display = "flex";
+}
+
+function showDescriptionBoxWhenContent(){
+    let text = descriptionContainer.textContent;
+    if (text !== null && text.trim() !== "") {
+        descriptionContainer.style.display = "flex";
+    }
+}
+
 
 
 //Microphone button
@@ -179,6 +219,7 @@ function toggleButtons(){
     } else{
         buttonStyleMuted();
         textBoxStyleWhenMuted();
+        descriptionBoxStyleWhenMuted()
     }
 
     //On toggle the textContainer displays default message
@@ -214,7 +255,12 @@ button.addEventListener("click", (e) => {
 //used to restart after a double recognition
 var lastWord = "";
 
+let misheardWordsCounter = 0;
+
 function pressButtons(text){
+
+    let description;
+    descriptionBoxStyleWhenMuted();
 
     //private helper function
     function notAndOption (userInput){
@@ -283,14 +329,21 @@ function pressButtons(text){
         if (text.length>=20){
             text  = text.substring(0,17) + "...";
         }
+        description = "Total misheard words: " + misheardWordsCounter;
         text = "I'm sorry, what do you mean by: " + text + "?";
+        misheardWordsCounter++;
         updateTextBoxText(text);
+        updateDescriptionBoxText(description)
+        showDescriptionBoxWhenContent();
+
         return;
     }
 
 
     //update textContainer to corresponding text
     textContainer.textContent = text;
+    descriptionContainer.textContent = description
+    showDescriptionBoxWhenContent();
     //restart recognition if a word is duplicated
     if (text.includes(lastWord)) {
         //manual stop is not active, so it will restart the client
