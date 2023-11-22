@@ -31,41 +31,44 @@ recognition.continuous = true;
 
 //Displays the user text
 const textContainer = document.createElement("textBox");
-textContainer.textContent = "I'm listening...";
+textContainer.textContent = "Welcome to Quassel";
+textContainer.style.borderTopLeftRadius = "0.5rem";
+textContainer.style.borderBottomLeftRadius = "0.5rem";
 textContainer.setAttribute("id", "displayText");
 textContainer.style.position = "fixed";
-textContainer.style.top = "70px";
-textContainer.style.right = "100px";
+textContainer.style.top = "98px";
+textContainer.style.right = "85px";
 textContainer.style.zIndex = "10000";
-textContainer.style.background = "#000";
+textContainer.style.background = "#2e3856";
 textContainer.style.color = "#fff";
-textContainer.style.fontSize = "25px";
+textContainer.style.fontSize = "20px";
 textContainer.style.cursor = "pointer";
-textContainer.style.width = "300px";
-textContainer.style.height = "80px";
+textContainer.style.width = "175px";
+textContainer.style.height = "60px";
 textContainer.style.alignItems = "center";
 textContainer.style.justifyContent = "center";
 textContainer.style.display = "none";
-textContainer.style.padding = "10px"
+textContainer.style.padding = "10px";
 document.body.appendChild(textContainer);
 
 const descriptionContainer = document.createElement("textBox");
-descriptionContainer.textContent = "";
+descriptionContainer.textContent = "Select the correct answer by stating \'one\', \'two\', \'three\' or \'four\'";
+descriptionContainer.style.borderRadius = "0.5rem";
 descriptionContainer.setAttribute("id2", "displayText2");
 descriptionContainer.style.position = "fixed";
-descriptionContainer.style.top = "150px";
-descriptionContainer.style.right = "20px";
+descriptionContainer.style.top = "180px";
+descriptionContainer.style.right = "25px";
 descriptionContainer.style.zIndex = "9999";
-descriptionContainer.style.background = "#333";
+descriptionContainer.style.background = "#2e3856";
 descriptionContainer.style.color = "#fff";
 descriptionContainer.style.fontSize = "16px";
 descriptionContainer.style.cursor = "pointer";
-descriptionContainer.style.width = "380px";
+descriptionContainer.style.width = "235px";
 descriptionContainer.style.height = "auto";
 descriptionContainer.style.alignItems = "center";
 descriptionContainer.style.justifyContent = "start";
 descriptionContainer.style.display = "none";
-descriptionContainer.style.padding = "10px"
+descriptionContainer.style.padding = "10px";
 document.body.appendChild(descriptionContainer);
 
 //displays a cat basic version
@@ -185,13 +188,14 @@ function showDescriptionBoxWhenContent(){
 const button = document.createElement("button");
 button.id = "speechToTextButton";
 button.textContent = "🎙️";
+
 button.style.position = "fixed";
-button.style.top = "70px";
-button.style.right = "20px";
+button.style.top = "98px";
+button.style.right = "25px";
 button.style.zIndex = "10000";
 button.style.border = "none";
-button.style.width = "80px";
-button.style.height = "80px";
+button.style.width = "60px";
+button.style.height = "60px";
 button.style.fontSize = "25px";
 button.style.cursor = "pointer";
 button.style.display = "none";
@@ -204,6 +208,8 @@ function buttonStyleMuted(){
 function buttonStyleNotMuted() {
     button.style.borderRadius = "0";
     button.style.background = "#f00";
+    button.style.borderTopRightRadius = "0.5rem";
+    button.style.borderBottomRightRadius = "0.5rem";
 }
 
 
@@ -215,6 +221,8 @@ function toggleButtons(){
     if (button.style.borderRadius === "120px"){
         buttonStyleNotMuted();
         textBoxStyleNotMuted();
+        descriptionBoxStyleNotMuted();
+
 
     } else{
         buttonStyleMuted();
@@ -223,7 +231,7 @@ function toggleButtons(){
     }
 
     //On toggle the textContainer displays default message
-    updateTextBoxText("I'm listening...");
+    updateTextBoxText("Welcome to Quassel");
 }
 
 
