@@ -3,16 +3,6 @@
  *
  * button is used to toggle the speech recognition
  *
- * Technical TODOs
- * TODO bug, that you can call next only twice
- * TODO bug, not recognizing the first word
- * TODO add Logo
- * TODO fix that text is bigger then textBox
- *
- * Program Design TODOs
- * TODO difference between user and program text
- * TODO how do users learn the program, maybe in description
- *
  *
  * @type {HTMLElement}
  */
@@ -31,7 +21,6 @@ recognition.continuous = true;
 const button = document.createElement("button");
 button.id = "speechToTextButton";
 button.textContent = "🎙️";
-
 button.style.position = "fixed";
 button.style.top = "98px";
 button.style.right = "25px";
@@ -67,6 +56,7 @@ textContainer.style.display = "none";
 textContainer.style.padding = "10px";
 document.body.appendChild(textContainer);
 
+//Displays Quassel feedback
 const descriptionContainer = document.createElement("textBox");
 let selectAnswer = "Select the correct answer by stating \'one\', \'two\', \'three\' or \'four\'";
 descriptionContainer.textContent = selectAnswer;
@@ -87,6 +77,13 @@ descriptionContainer.style.justifyContent = "start";
 descriptionContainer.style.display = "none";
 descriptionContainer.style.padding = "10px";
 document.body.appendChild(descriptionContainer);
+
+//creates the parent for all the cats
+var catParent = document.createElement("div");
+catParent.id = "cat";
+catParent.style.zIndex = "10000";
+var countTheCats = 0;
+document.body.appendChild(catParent);
 
 function buttonStyleMuted(){
     button.style.borderRadius = "120px";
@@ -149,90 +146,12 @@ function toggleButtons(){
 }
 
 
-//displays a cat basic version
-/*const cat = document.createElement("div");
-cat.style.backgroundImage = "url('" + chrome.runtime.getURL('image/cat.png') + "')";
-cat.style.backgroundSize = "cover";
-cat.style.position = "absolute";
-cat.style.display = "none";
-cat.style.top = "400px";
-cat.style.left = "20px";
-cat.style.width = "360px";
-cat.style.height = "360px";
-document.body.appendChild(cat);*/
-
-//creates the parent for all the cats
-var catParent = document.createElement("div");
-catParent.id = "cat";
-var countTheCats = 0;
-document.body.appendChild(catParent);
-
-function makeSeveralCats(numberOfCats){
-    for (let i = 0; i<numberOfCats;i++){
-        makeACat();
-    }
-}
-
-function makeACat(){
-    countTheCats++;
-    var cat = document.createElement("div");
-    cat.style.backgroundImage = "url('" + chrome.runtime.getURL('image/cat.png') + "')";
-    cat.style.backgroundSize = "cover";
-    cat.style.position = "absolute";
-    catParent.style.display = "block";
-    cat.style.top = "400px";
-    cat.style.left ="" + countTheCats*20 + "px";
-    cat.style.width = "" + 100 * countTheCats*0.2+ "px";
-    cat.style.height = "" + 100 * countTheCats*0.2+ "px";
-    //adds the cat to the parent
-    catParent.appendChild(cat);
-}
 
 
 
-/*
-Additional Textbox as speech bubble
-
-// Create the speech bubble div
-var bubbleDiv = document.createElement("div");
-bubbleDiv.style.zIndex = "9999";
-bubbleDiv.style.position = "fixed";
-bubbleDiv.style.top = "170px";
-bubbleDiv.style.right = "20px";
-bubbleDiv.style.width = "360px";
-bubbleDiv.style.height = "100px";
-bubbleDiv.style.backgroundColor = "#FFCC00";
-bubbleDiv.style.border = "2px solid #999";
-bubbleDiv.style.borderRadius = "10px";
-bubbleDiv.style.padding = "10px";
-
-// Create the speech bubble tail
-var bubbleTail = document.createElement("div");
-bubbleTail.style.position = "absolute";
-bubbleTail.style.top = "-20px";
-bubbleTail.style.right = "20px";
-bubbleTail.style.borderLeft = "20px solid transparent";
-bubbleTail.style.borderRight = "20px solid transparent";
-bubbleTail.style.borderBottom = "20px solid #FFCC00";
-bubbleDiv.appendChild(bubbleTail);
-
-// Create the textarea
-var textArea = document.createElement("textarea");
-textArea.style.width = "100%";
-textArea.style.height = "80%";
-textArea.style.border = "none";
-textArea.style.backgroundColor = "#FFCC00";
-bubbleDiv.appendChild(textArea);
-
-// Add the speech bubble to the body
-document.body.appendChild(bubbleDiv);*/
 
 
 
-/**
- * I do not understand this function
- * @kev
- */
 let activeElement;
 // Start or stop speech recognition
 button.addEventListener("mousedown", (event) => {
@@ -412,4 +331,28 @@ function toggleRecognition() {
         recognition.manualStop = false;
         recognition.start();
     }
+}
+
+
+
+function makeSeveralCats(numberOfCats){
+    for (let i = 0; i<numberOfCats;i++){
+        makeACat();
+    }
+}
+
+function makeACat(){
+    countTheCats++;
+    var cat = document.createElement("div");
+    cat.style.backgroundImage = "url('" + chrome.runtime.getURL('image/cat.png') + "')";
+    cat.style.backgroundSize = "cover";
+    cat.style.position = "absolute";
+    catParent.style.display = "block";
+    cat.style.top = "400px";
+    cat.style.zIndex = "10000";
+    cat.style.left ="" + countTheCats*20 + "px";
+    cat.style.width = "" + 100 * countTheCats*0.4+ "px";
+    cat.style.height = "" + 100 * countTheCats*0.4+ "px";
+    //adds the cat to the parent
+    catParent.appendChild(cat);
 }
