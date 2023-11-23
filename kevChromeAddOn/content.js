@@ -316,12 +316,16 @@ function pressButtons(text) {
 
 // Funktion zur Handhabung der Auswahl einer Option
 function handleOptionSelection(selector, optionText) {
+    let continueButton = document.querySelector('[aria-label="Continue"]');
     let option = document.querySelector(selector);
-    if (option) {
+    if (option && !continueButton) {
         option.click();
         text = optionText;
         setTimeout(() => {
-                 checkCorrectAnswer();}, 1000);
+            checkCorrectAnswer();}, 1000);
+        } else if (option && continueButton){
+            text = optionText;
+            updateDescriptionBoxText("state continue");
     } else {
         notAnOption();
     }
