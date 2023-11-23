@@ -246,10 +246,11 @@ button.addEventListener("click", (e) => {
     toggleRecognition();
 });
 
-// deletes answer after 3 seconds
-function deleteAnswer(){
-    setTimeout(() => {
-          updateTextBoxText("");}, 1000);
+// deletes answer after 1 second and displays selectAnswer
+function switchQuestion(){
+        setTimeout(() => {
+            updateDescriptionBoxText(selectAnswer);
+            updateTextBoxText("");}, 1000);
 }
 
 
@@ -259,9 +260,7 @@ function checkCorrectAnswer(){
     if (continueButton) {
         updateDescriptionBoxText("state continue");
     } else {
-        deleteAnswer();
-        setTimeout(() => {
-            updateDescriptionBoxText(selectAnswer);}, 1000);
+        switchQuestion();
     }
 }
 /**
@@ -299,7 +298,7 @@ function pressButtons(text) {
     } else if (text.includes("back") || text.includes("previous")) {
         document.querySelector('[aria-label="Press this to study the previous card"]').click();
     } else if (text.includes("continue") || text.includes("next")) {
-        handleContinueOption();
+        handleContinueOption("continue");
     } else if (text.includes("flip")) {
         document.querySelector('div.o11g6ed5').click();
     } else if (text.includes("cat") || text.includes("cut")) {
@@ -310,8 +309,9 @@ function pressButtons(text) {
         handleDefaultCase();
         return;
     }
-    updateUI(); // Aktualisiere die Benutzeroberfläche
     handleDuplicateWordRecognition();
+    updateUI(); // Aktualisiere die Benutzeroberfläche
+
 }
 
 // Funktion zur Handhabung der Auswahl einer Option
@@ -325,22 +325,24 @@ function handleOptionSelection(selector, optionText) {
             checkCorrectAnswer();}, 1000);
         } else if (option && continueButton){
             text = optionText;
-            updateDescriptionBoxText("state continue");
+            updateDescriptionBoxText("state \'continue\'");
     } else {
         notAnOption();
     }
 }
 
 // Funktion zur Handhabung der "Weiter"-Option
-function handleContinueOption() {
+function handleContinueOption(optionText) {
     let continueButton = document.querySelector('[aria-label="Continue"]');
     if (!continueButton) {
-        text = text + " is not an option at the moment";
+        text = optionText;
+        updateDescriptionBoxText(optionText + " is not an option at the moment");
+        setTimeout(() => {
+            updateDescriptionBoxText(selectAnswer);
+            updateTextBoxText("");}, 4000);
     } else {
         continueButton.click();
-        deleteAnswer();
-        setTimeout(() => {
-            updateDescriptionBoxText(selectAnswer);}, 1000);
+        switchQuestion();
     }
 }
 
@@ -352,16 +354,13 @@ function handleDefaultCase() {
     let description = "I'm \n sorry, what do you mean by: " + text + "?";
     updateDescriptionBoxText(description);
     setTimeout(() => {
-        description = " Select the correct answer by stating 'one', 'two', 'three', or 'four'";
-        updateDescriptionBoxText(description);}, 4000);
-    //updateTextBoxText(text);
-    setTimeout(() => {
-            updateTextBoxText("");}, 4000);
+        updateDescriptionBoxText(selectAnswer);
+        updateTextBoxText("");}, 4000);
 }
 
 // Funktion zur Aktualisierung der Benutzeroberfläche
 function updateUI() {
-    textContainer.textContent = text;
+    updateTextBoxText(text);
     descriptionContainer.textContent = description;
     //showDescriptionBoxWhenContent();
 }
