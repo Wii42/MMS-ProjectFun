@@ -27,11 +27,27 @@ recognition.interimResults = false;
 recognition.maxAlternatives = 1;
 recognition.continuous = true;
 
+//Microphone button
+const button = document.createElement("button");
+button.id = "speechToTextButton";
+button.textContent = "🎙️";
 
+button.style.position = "fixed";
+button.style.top = "98px";
+button.style.right = "25px";
+button.style.zIndex = "10000";
+button.style.border = "none";
+button.style.width = "60px";
+button.style.height = "60px";
+button.style.fontSize = "25px";
+button.style.cursor = "pointer";
+button.style.display = "none";
+document.body.appendChild(button);
 
 //Displays the user text
 const textContainer = document.createElement("textBox");
-textContainer.textContent = "Welcome to Quassel";
+textContainer.textContent = "Quassel";
+textContainer.style.fontSize = "16px";
 textContainer.style.borderTopLeftRadius = "0.5rem";
 textContainer.style.borderBottomLeftRadius = "0.5rem";
 textContainer.setAttribute("id", "displayText");
@@ -40,7 +56,7 @@ textContainer.style.top = "98px";
 textContainer.style.right = "85px";
 textContainer.style.zIndex = "10000";
 textContainer.style.background = "#2e3856";
-textContainer.style.color = "#fff";
+textContainer.style.color = "#f6f7fb";
 textContainer.style.fontSize = "20px";
 textContainer.style.cursor = "pointer";
 textContainer.style.width = "175px";
@@ -52,7 +68,8 @@ textContainer.style.padding = "10px";
 document.body.appendChild(textContainer);
 
 const descriptionContainer = document.createElement("textBox");
-descriptionContainer.textContent = "Select the correct answer by stating \'one\', \'two\', \'three\' or \'four\'";
+let selectAnswer = "Select the correct answer by stating \'one\', \'two\', \'three\' or \'four\'";
+descriptionContainer.textContent = selectAnswer;
 descriptionContainer.style.borderRadius = "0.5rem";
 descriptionContainer.setAttribute("id2", "displayText2");
 descriptionContainer.style.position = "fixed";
@@ -60,7 +77,7 @@ descriptionContainer.style.top = "180px";
 descriptionContainer.style.right = "25px";
 descriptionContainer.style.zIndex = "9999";
 descriptionContainer.style.background = "#2e3856";
-descriptionContainer.style.color = "#fff";
+descriptionContainer.style.color = "#f6f7fb";
 descriptionContainer.style.fontSize = "16px";
 descriptionContainer.style.cursor = "pointer";
 descriptionContainer.style.width = "235px";
@@ -70,6 +87,72 @@ descriptionContainer.style.justifyContent = "start";
 descriptionContainer.style.display = "none";
 descriptionContainer.style.padding = "10px";
 document.body.appendChild(descriptionContainer);
+
+function buttonStyleMuted(){
+    button.style.borderRadius = "120px";
+    button.style.background = "AliceBlue";
+}
+function buttonStyleNotMuted() {
+    button.style.borderRadius = "0";
+    button.style.background = "#b00020";
+    button.style.borderTopRightRadius = "0.5rem";
+    button.style.borderBottomRightRadius = "0.5rem";
+}
+
+function updateTextBoxText (newText){
+    textContainer.textContent = newText;
+}
+function textBoxStyleWhenMuted(){
+    //Hides the textBox
+    textContainer.style.display = "none";
+}
+function textBoxStyleNotMuted(){
+    textContainer.style.display = "none";
+    textContainer.style.display = "flex";
+}
+
+function updateDescriptionBoxText (newText){
+    descriptionContainer.textContent = newText;
+}
+function descriptionBoxStyleWhenMuted(){
+    //Hides the textBox
+    descriptionContainer.style.display = "none";
+}
+
+function descriptionBoxStyleNotMuted(){
+    descriptionContainer.style.display = "none";
+    descriptionContainer.style.display = "flex";
+}
+// TODO brauchen wir diese funktion ?
+function showDescriptionBoxWhenContent(){
+    let text = descriptionContainer.textContent;
+    if (text !== null && text.trim() !== "") {
+        descriptionContainer.style.display = "flex";
+    }
+}
+
+
+/**
+ * Toggles the Design of the buttons, depending on if the mic is muted or not
+ */
+function toggleButtons(){
+    //toggle between round and square shape of the button, uses the radius of the button to check
+    if (button.style.borderRadius === "120px"){
+        buttonStyleNotMuted();
+        textBoxStyleNotMuted();
+        descriptionBoxStyleNotMuted();
+
+
+    } else{
+        buttonStyleMuted();
+        textBoxStyleWhenMuted();
+        descriptionBoxStyleWhenMuted();
+    }
+
+    //On toggle the textContainer displays default message
+    //updateTextBoxText("Quassel");
+}
+
 
 //displays a cat basic version
 /*const cat = document.createElement("div");
@@ -150,92 +233,6 @@ bubbleDiv.appendChild(textArea);
 document.body.appendChild(bubbleDiv);*/
 
 
-function updateTextBoxText (newText){
-    textContainer.textContent = newText;
-}
-function textBoxStyleWhenMuted(){
-    //Hides the textBox
-    textContainer.style.display = "none";
-}
-function textBoxStyleNotMuted(){
-    textContainer.style.display = "none";
-    textContainer.style.display = "flex";
-}
-
-function updateDescriptionBoxText (newText){
-    descriptionContainer.textContent = newText;
-}
-function descriptionBoxStyleWhenMuted(){
-    //Hides the textBox
-    descriptionContainer.style.display = "none";
-}
-
-function descriptionBoxStyleNotMuted(){
-    descriptionContainer.style.display = "none";
-    descriptionContainer.style.display = "flex";
-}
-
-function showDescriptionBoxWhenContent(){
-    let text = descriptionContainer.textContent;
-    if (text !== null && text.trim() !== "") {
-        descriptionContainer.style.display = "flex";
-    }
-}
-
-
-
-//Microphone button
-const button = document.createElement("button");
-button.id = "speechToTextButton";
-button.textContent = "🎙️";
-
-button.style.position = "fixed";
-button.style.top = "98px";
-button.style.right = "25px";
-button.style.zIndex = "10000";
-button.style.border = "none";
-button.style.width = "60px";
-button.style.height = "60px";
-button.style.fontSize = "25px";
-button.style.cursor = "pointer";
-button.style.display = "none";
-document.body.appendChild(button);
-
-function buttonStyleMuted(){
-    button.style.borderRadius = "120px";
-    button.style.background = "AliceBlue";
-}
-function buttonStyleNotMuted() {
-    button.style.borderRadius = "0";
-    button.style.background = "#f00";
-    button.style.borderTopRightRadius = "0.5rem";
-    button.style.borderBottomRightRadius = "0.5rem";
-}
-
-
-/**
- * Toggles the Design of the buttons, depending on if the mic is muted or not
- */
-function toggleButtons(){
-    //toggle between round and square shape of the button, uses the radius of the button to check
-    if (button.style.borderRadius === "120px"){
-        buttonStyleNotMuted();
-        textBoxStyleNotMuted();
-        descriptionBoxStyleNotMuted();
-
-
-    } else{
-        buttonStyleMuted();
-        textBoxStyleWhenMuted();
-        descriptionBoxStyleWhenMuted()
-    }
-
-    //On toggle the textContainer displays default message
-    updateTextBoxText("Welcome to Quassel");
-}
-
-
-
 
 /**
  * I do not understand this function
@@ -253,6 +250,26 @@ button.addEventListener("click", (e) => {
     toggleRecognition();
 });
 
+// deletes answer after 3 seconds
+function deleteAnswer(){
+setTimeout(() => {
+          updateTextBoxText("");}, 1000);
+}
+
+function deleteDescription(){
+setTimeout(() => {
+          updateDescriptionBoxText("");}, 3000);
+}
+
+// check correct answer
+function checkCorrectAnswer(){
+let continueButton = document.querySelector('[aria-label="Continue"]');
+if (continueButton) {
+    updateDescriptionBoxText("state continue");
+} else {
+   deleteAnswer();
+}
+}
 /**
  * Checks if there are any of the keywords in the text and presses the specific buttons
  *
@@ -265,101 +282,100 @@ var lastWord = "";
 
 let misheardWordsCounter = 0;
 
-function pressButtons(text){
+function pressButtons(text) {
+    text = text.toLowerCase(); // Konvertiere den Text in Kleinbuchstaben
 
-    let description;
-    descriptionBoxStyleWhenMuted();
-
-    //private helper function
-    function notAndOption (userInput){
-        text = text + " is not an option at the moment";
-        textContainer.textContent = text;
+    // Funktion zur Anzeige einer Nachricht, wenn die Option nicht verfügbar ist
+    function notAnOption() {
+        textContainer.textContent = text + " is not an option at the moment";
     }
 
-    text = text.toLowerCase();
-    //checks for the desired keywords
-    if (text.includes("one")||text.includes("1")) {
-        let option1 = document.querySelector("[data-testid='option-1']");
-        if (option1) {text = "one";
-        option1.click();}
-        else notAndOption(text);
-    }
-    else if (text.includes("stop")) {
+    // Überprüfung der verschiedenen Schlüsselwörter im Text
+    if (text.includes("stop")) {
         toggleRecognition();
         return;
-    }
-    else if (text.includes("two")||text.includes("2")|| text.includes("to")) {
-        let option2 = document.querySelector("[data-testid='option-2']");
-        if (option2) {text = "two";
-            option2.click();}
-        else notAndOption(text);
-    }
-    else if (text.includes("three")||text.includes("3")) {
-        let option3 = document.querySelector("[data-testid='option-3']");
-        if (option3) {text = "three";
-            option3.click();}
-        else notAndOption(text);
-    }
-    else if (text.includes("four")||text.includes("for")||text.includes("4")) {
-        let option4 = document.querySelector("[data-testid='option-4']");
-        if (option4) {text = "four";
-            option4.click();}
-        else notAndOption(text);
-    }
-    else if (text.includes("back")||text.includes("previous")) {
-        let back = document.querySelector('[aria-label="Press this to study the previous card"]');
-        back.click();
-    }
-
-    else if (text.includes("continue")||text.includes("next")) {
-        let continueButton = document.querySelector('[aria-label="Continue"]');
-        if (!continueButton){
-            continueButton = document.querySelector(".c1myr3p4 > div > div:nth-child(2) > button");
-        }
-        if (!continueButton) {
-            text = text + " is not an option at the moment";
-        } else continueButton.click();
-    }
-    //flips the flashcard
-    else if (text.includes("flip")){
-        let continueButton = document.querySelector('div.o11g6ed5');
-        continueButton.click();
-    }
-    else if (text.includes("cat")||text.includes("cut")){
-        text = "cat";
-         makeSeveralCats(8);
-    }
-    else if (text.includes("go away")){
+    } else if (text.includes("one") || text.includes("1")) {
+        handleOptionSelection("[data-testid='option-1']", "one");
+    } else if (text.includes("two") || text.includes("2") || text.includes("to")) {
+        handleOptionSelection("[data-testid='option-2']", "two");
+    } else if (text.includes("three") || text.includes("3")) {
+        handleOptionSelection("[data-testid='option-3']", "three");
+    } else if (text.includes("four") || text.includes("for") || text.includes("4")) {
+        handleOptionSelection("[data-testid='option-4']", "four");
+    } else if (text.includes("back") || text.includes("previous")) {
+        document.querySelector('[aria-label="Press this to study the previous card"]').click();
+    } else if (text.includes("continue") || text.includes("next")) {
+        handleContinueOption();
+    } else if (text.includes("flip")) {
+        document.querySelector('div.o11g6ed5').click();
+    } else if (text.includes("cat") || text.includes("cut")) {
+        makeSeveralCats(8);
+    } else if (text.includes("go away")) {
         catParent.style.display = "none";
-    }
-    else {
-        //Cuts of the text if it's too long
-        if (text.length>=20){
-            text  = text.substring(0,17) + "...";
-        }
-        description = "Total misheard words: " + misheardWordsCounter;
-        text = "I'm sorry, what do you mean by: " + text + "?";
-        misheardWordsCounter++;
-        updateTextBoxText(text);
-        updateDescriptionBoxText(description)
-        showDescriptionBoxWhenContent();
-
+    } else {
+        handleDefaultCase();
         return;
     }
+    updateUI(); // Aktualisiere die Benutzeroberfläche
+    handleDuplicateWordRecognition();
+}
 
+// Funktion zur Handhabung der Auswahl einer Option
+function handleOptionSelection(selector, optionText) {
+    let option = document.querySelector(selector);
+    if (option) {
+        option.click();
+        text = optionText;
+        setTimeout(() => {
+                 checkCorrectAnswer();
+            }, 1000);
+    } else {
+        notAnOption();
+    }
+}
 
-    //update textContainer to corresponding text
+// Funktion zur Handhabung der "Weiter"-Option
+function handleContinueOption() {
+    let continueButton = document.querySelector('[aria-label="Continue"]');
+    if (!continueButton) {
+        text = text + " is not an option at the moment";
+    } else {
+        continueButton.click();
+        deleteAnswer();
+        updateDescriptionBoxText(selectAnswer);
+    }
+}
+
+// Funktion zur Handhabung des Standardfalls
+function handleDefaultCase() {
+    if (text.length >= 20) {
+        text = text.substring(0, 17) + "...";
+    }
+    let description = "I'm \n sorry, what do you mean by: " + text + "?";
+    updateDescriptionBoxText(description);
+    setTimeout(() => {
+        description = " Select the correct answer by stating 'one', 'two', 'three', or 'four'";
+        updateDescriptionBoxText(description);
+    }, 4000);
+    //updateTextBoxText(text);
+    setTimeout(() => {
+            updateTextBoxText("");
+        }, 4000);
+}
+
+// Funktion zur Aktualisierung der Benutzeroberfläche
+function updateUI() {
     textContainer.textContent = text;
-    descriptionContainer.textContent = description
-    showDescriptionBoxWhenContent();
-    //restart recognition if a word is duplicated
+    descriptionContainer.textContent = description;
+    //showDescriptionBoxWhenContent();
+}
+
+// Funktion zur Überprüfung von Duplikaten im Text
+function handleDuplicateWordRecognition() {
     if (text.includes(lastWord)) {
-        //manual stop is not active, so it will restart the client
         recognition.stop();
     }
-
     lastWord = text;
-
 }
 
 
