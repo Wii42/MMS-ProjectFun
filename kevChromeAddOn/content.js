@@ -252,10 +252,6 @@ function deleteAnswer(){
           updateTextBoxText("");}, 1000);
 }
 
-function deleteDescription(){
-    setTimeout(() => {
-          updateDescriptionBoxText("");}, 3000);
-}
 
 // check correct answer
 function checkCorrectAnswer(){
@@ -264,6 +260,8 @@ function checkCorrectAnswer(){
         updateDescriptionBoxText("state continue");
     } else {
         deleteAnswer();
+        setTimeout(() => {
+            updateDescriptionBoxText(selectAnswer);}, 1000);
     }
 }
 /**
@@ -337,7 +335,8 @@ function handleContinueOption() {
     } else {
         continueButton.click();
         deleteAnswer();
-        updateDescriptionBoxText(selectAnswer);
+        setTimeout(() => {
+            updateDescriptionBoxText(selectAnswer);}, 1000);
     }
 }
 
