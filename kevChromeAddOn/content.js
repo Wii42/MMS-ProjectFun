@@ -298,7 +298,7 @@ function pressButtons(text) {
     } else if (text.includes("back") || text.includes("previous")) {
         document.querySelector('[aria-label="Press this to study the previous card"]').click();
     } else if (text.includes("continue") || text.includes("next")) {
-        handleContinueOption("continue");
+        handleContinueOption(text);
     } else if (text.includes("flip")) {
         document.querySelector('div.o11g6ed5').click();
     } else if (text.includes("cat") || text.includes("cut")) {
@@ -306,11 +306,11 @@ function pressButtons(text) {
     } else if (text.includes("go away")) {
         catParent.style.display = "none";
     } else {
-        handleDefaultCase();
+        handleDefaultCase(text);
         return;
     }
-    handleDuplicateWordRecognition();
-    updateUI(); // Aktualisiere die Benutzeroberfläche
+    //handleDuplicateWordRecognition();
+    //updateUI(text); // Aktualisiere die Benutzeroberfläche
 
 }
 
@@ -320,11 +320,11 @@ function handleOptionSelection(selector, optionText) {
     let option = document.querySelector(selector);
     if (option && !continueButton) {
         option.click();
-        text = optionText;
+        updateTextBoxText(optionText);
         setTimeout(() => {
             checkCorrectAnswer();}, 1000);
         } else if (option && continueButton){
-            text = optionText;
+            updateTextBoxText(optionText);
             updateDescriptionBoxText("state \'continue\'");
     } else {
         notAnOption();
@@ -332,11 +332,11 @@ function handleOptionSelection(selector, optionText) {
 }
 
 // Funktion zur Handhabung der "Weiter"-Option
-function handleContinueOption(optionText) {
+function handleContinueOption(text) {
     let continueButton = document.querySelector('[aria-label="Continue"]');
     if (!continueButton) {
-        text = optionText;
-        updateDescriptionBoxText(optionText + " is not an option at the moment");
+        updateTextBoxText(text);
+        updateDescriptionBoxText(text + " is not an option at the moment");
         setTimeout(() => {
             updateDescriptionBoxText(selectAnswer);
             updateTextBoxText("");}, 4000);
@@ -347,11 +347,12 @@ function handleContinueOption(optionText) {
 }
 
 // Funktion zur Handhabung des Standardfalls
-function handleDefaultCase() {
+function handleDefaultCase(text) {
     if (text.length >= 20) {
         text = text.substring(0, 17) + "...";
     }
     let description = "I'm \n sorry, what do you mean by: " + text + "?";
+    updateTextBoxText(text);
     updateDescriptionBoxText(description);
     setTimeout(() => {
         updateDescriptionBoxText(selectAnswer);
@@ -359,14 +360,14 @@ function handleDefaultCase() {
 }
 
 // Funktion zur Aktualisierung der Benutzeroberfläche
-function updateUI() {
+function updateUI(text) {
     updateTextBoxText(text);
     descriptionContainer.textContent = description;
     //showDescriptionBoxWhenContent();
 }
 
 // Funktion zur Überprüfung von Duplikaten im Text
-function handleDuplicateWordRecognition() {
+function handleDuplicateWordRecognition(text) {
     if (text.includes(lastWord)) {
         recognition.stop();
     }
