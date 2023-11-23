@@ -141,16 +141,11 @@ function toggleButtons(){
         buttonStyleNotMuted();
         textBoxStyleNotMuted();
         descriptionBoxStyleNotMuted();
-
-
-    } else{
+        } else {
         buttonStyleMuted();
         textBoxStyleWhenMuted();
         descriptionBoxStyleWhenMuted();
     }
-
-    //On toggle the textContainer displays default message
-    //updateTextBoxText("Quassel");
 }
 
 
@@ -244,6 +239,7 @@ button.addEventListener("mousedown", (event) => {
     // Save the currently active element in mousedown
     activeElement = document.activeElement;
 });
+
 button.addEventListener("click", (e) => {
     // chrome.runtime.sendMessage({ command: "toggleRecognition" });
     e.preventDefault();
@@ -252,23 +248,23 @@ button.addEventListener("click", (e) => {
 
 // deletes answer after 3 seconds
 function deleteAnswer(){
-setTimeout(() => {
+    setTimeout(() => {
           updateTextBoxText("");}, 1000);
 }
 
 function deleteDescription(){
-setTimeout(() => {
+    setTimeout(() => {
           updateDescriptionBoxText("");}, 3000);
 }
 
 // check correct answer
 function checkCorrectAnswer(){
-let continueButton = document.querySelector('[aria-label="Continue"]');
-if (continueButton) {
-    updateDescriptionBoxText("state continue");
-} else {
-   deleteAnswer();
-}
+    let continueButton = document.querySelector('[aria-label="Continue"]');
+    if (continueButton) {
+        updateDescriptionBoxText("state continue");
+    } else {
+        deleteAnswer();
+    }
 }
 /**
  * Checks if there are any of the keywords in the text and presses the specific buttons
@@ -327,8 +323,7 @@ function handleOptionSelection(selector, optionText) {
         option.click();
         text = optionText;
         setTimeout(() => {
-                 checkCorrectAnswer();
-            }, 1000);
+                 checkCorrectAnswer();}, 1000);
     } else {
         notAnOption();
     }
@@ -355,12 +350,10 @@ function handleDefaultCase() {
     updateDescriptionBoxText(description);
     setTimeout(() => {
         description = " Select the correct answer by stating 'one', 'two', 'three', or 'four'";
-        updateDescriptionBoxText(description);
-    }, 4000);
+        updateDescriptionBoxText(description);}, 4000);
     //updateTextBoxText(text);
     setTimeout(() => {
-            updateTextBoxText("");
-        }, 4000);
+            updateTextBoxText("");}, 4000);
 }
 
 // Funktion zur Aktualisierung der Benutzeroberfläche
@@ -387,7 +380,6 @@ recognition.onresult = (event) => {
     if (transcript.length!==0) {
         pressButtons(transcript);
     }
-
 };
 
 recognition.onend = () => {
@@ -417,5 +409,4 @@ function toggleRecognition() {
         recognition.manualStop = false;
         recognition.start();
     }
-
 }
