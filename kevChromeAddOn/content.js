@@ -217,13 +217,25 @@ function pressButtons(text) {
     } else if (text.includes("back") || text.includes("previous")) {
         document.querySelector('[aria-label="Press this to study the previous card"]').click();
     } else if (text.includes("continue") || text.includes("next")) {
-        handleContinueOption(text);
-    } else if (text.includes("flip")) {
+        handleContinueOption(text);}
+    /* commented out, till flashcard functionality is added back
+    else if (text.includes("flip")) {
         document.querySelector('div.o11g6ed5').click();
-    } else if (text.includes("cat") || text.includes("cut")) {
+    } */
+    else if (text.includes("cat") || text.includes("cut")) {
         makeSeveralCats(8);
+        updateTextBoxText("cat");
+        updateDescriptionBoxText("Quassel loves cats");
+        setTimeout(() => {
+            updateDescriptionBoxText(selectAnswer);
+            updateTextBoxText("");}, 4000);
     } else if (text.includes("go away")) {
         catParent.style.display = "none";
+        updateTextBoxText("go away");
+        updateDescriptionBoxText("Nooo, where are the cats?");
+        setTimeout(() => {
+            updateDescriptionBoxText(selectAnswer);
+            updateTextBoxText("");}, 4000);
     } else {
         handleDefaultCase(text);
         return;
