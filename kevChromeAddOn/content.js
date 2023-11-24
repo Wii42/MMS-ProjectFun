@@ -216,10 +216,10 @@ function pressButtons(text) {
         handleOptionSelection("[data-testid='option-4']", "four");
     } else if (text.includes("back") || text.includes("previous")) {
         document.querySelector('[aria-label="Press this to study the previous card"]').click();
-    } else if (text.includes("continue") || text.includes("next")) {
-        handleContinueOption(text);
     } else if (text.includes("flip")) {
         document.querySelector('div.o11g6ed5').click();
+    } else if (text.includes("continue") || text.includes("next")) {
+        handleContinueOption(text);
     } else if (text.includes("cat") || text.includes("cut")) {
         makeSeveralCats(8);
     } else if (text.includes("go away")) {
@@ -228,8 +228,8 @@ function pressButtons(text) {
         handleDefaultCase(text);
         return;
     }
-    //handleDuplicateWordRecognition();
     //updateUI(text); // Aktualisiere die Benutzeroberfläche
+    handleDuplicateWordRecognition(text);
 
 }
 
@@ -288,8 +288,10 @@ function updateUI(text) {
 // Funktion zur Überprüfung von Duplikaten im Text
 function handleDuplicateWordRecognition(text) {
     if (text.includes(lastWord)) {
+        //manual stop is not active, so it will restart the client
         recognition.stop();
     }
+
     lastWord = text;
 }
 
