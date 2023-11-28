@@ -196,10 +196,33 @@ let misheardWordsCounter = 0;
 function pressButtons(text) {
     text = text.toLowerCase(); // Konvertiere den Text in Kleinbuchstaben
 
-    // Funktion zur Anzeige einer Nachricht, wenn die Option nicht verfügbar ist
-    function notAnOption() {
-        textContainer.textContent = text + " is not an option at the moment";
+
+    //Reads the answers from the quizlet pages
+    let optionOneAsString = document.querySelector("#AssistantModeTarget > div > div > div.cz3cbvv > div > div > div " +
+        "> article > div.ag1fjc > div > section:nth-child(1) > div.t1d08860 > div > div").getAttribute('aria-label');
+    console.log("Option 1 = " + optionOneAsString);
+    let optionTwoAsString = document.querySelector("#AssistantModeTarget > div > div > div.cz3cbvv > div > div > div > article > div.ag1fjc > div > section:nth-child(2) > div.t1d08860 > div > div").getAttribute('aria-label');
+    console.log("Option 2 = " + optionTwoAsString);
+    let optionThreeAsString = document.querySelector("#AssistantModeTarget > div > div > div.cz3cbvv > div > div > div > article > div.ag1fjc > div > section:nth-child(3) > div.t1d08860 > div > div").getAttribute('aria-label');
+    console.log("Option 3 = " +optionThreeAsString);
+    let optionFourAsString = document.querySelector("#AssistantModeTarget > div > div > div.cz3cbvv > div > div > div > article > div.ag1fjc > div > section:nth-child(4) > div.t1d08860 > div > div").getAttribute('aria-label');
+    console.log("Option 2 = " + optionFourAsString);
+
+    //checks for the answers and changes the text
+    if(text.includes(optionOneAsString.toLowerCase())){
+        text = "one";
     }
+    else if(text.includes(optionTwoAsString.toLowerCase())){
+        text = "two";
+    }
+    else if(text.includes(optionThreeAsString.toLowerCase())){
+        text = "three";
+    }
+    else if(text.includes(optionFourAsString.toLowerCase())){
+        text = "four";
+    }
+
+
 
     // Überprüfung der verschiedenen Schlüsselwörter im Text
     if (text.includes("stop")) {
