@@ -35,7 +35,6 @@ document.body.appendChild(button);
 
 //Displays the user text
 const textContainer = document.createElement("textBox");
-textContainer.textContent = "Quassel";
 textContainer.style.fontSize = "16px";
 textContainer.style.borderTopLeftRadius = "0.5rem";
 textContainer.style.borderBottomLeftRadius = "0.5rem";
@@ -270,8 +269,12 @@ function handleContinueOption(text) {
             updateDescriptionBoxText(selectAnswer);
             updateTextBoxText("");}, 4000);
     } else {
-        continueButton.click();
+        setTimeout(() => {
+                    updateTextBoxText(text);
+                    continueButton.click();
+                    }, 3000);
         switchQuestion();
+
     }
 }
 
@@ -292,7 +295,6 @@ function handleDefaultCase(text) {
 function updateUI(text) {
     updateTextBoxText(text);
     descriptionContainer.textContent = description;
-    //showDescriptionBoxWhenContent();
 }
 
 // Funktion zur Überprüfung von Duplikaten im Text
@@ -340,6 +342,7 @@ function toggleRecognition() {
     } else {
         recognition.manualStop = false;
         recognition.start();
+        textContainer.textContent = "Quassel";
     }
 }
 
