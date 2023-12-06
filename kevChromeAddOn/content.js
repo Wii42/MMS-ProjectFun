@@ -58,6 +58,7 @@ document.body.appendChild(textContainer);
 //Displays Quassel feedback
 const descriptionContainer = document.createElement("textBox");
 let selectAnswer = "Select the correct answer by stating \'one\', \'two\', \'three\' or \'four\'";
+let stateContinue = "state \'continue\'"
 descriptionContainer.textContent = selectAnswer;
 descriptionContainer.style.borderRadius = "0.5rem";
 descriptionContainer.setAttribute("id2", "displayText2");
@@ -78,10 +79,10 @@ descriptionContainer.style.padding = "10px";
 document.body.appendChild(descriptionContainer);
 
 //creates the parent for all the cats
-var catParent = document.createElement("div");
+const catParent = document.createElement("div");
 catParent.id = "cat";
 catParent.style.zIndex = "10000";
-var countTheCats = 0;
+let countTheCats = 0;
 document.body.appendChild(catParent);
 
 function buttonStyleMuted(){
@@ -176,20 +177,18 @@ function switchQuestion(){
 function checkCorrectAnswer(){
     let continueButton = document.querySelector('[aria-label="Continue"]');
     if (continueButton) {
-        updateDescriptionBoxText("state continue");
+        updateDescriptionBoxText(stateContinue);
     } else {
         switchQuestion();
     }
 }
+
 /**
  * Checks if there are any of the keywords in the text and presses the specific buttons
  *
  * @param text
  */
-
-
-//used to restart after a double recognition
-var lastWord = "";
+let lastWord = "";
 
 let misheardWordsCounter = 0;
 
@@ -242,6 +241,7 @@ function pressButtons(text) {
 function handleOptionSelection(selector, optionText) {
     let continueButton = document.querySelector('[aria-label="Continue"]');
     let option = document.querySelector(selector);
+
     if (option && !continueButton) {
         option.click();
         updateTextBoxText(optionText);
@@ -268,7 +268,7 @@ function handleContinueOption(text) {
         setTimeout(() => {
                     updateTextBoxText(text);
                     continueButton.click();
-                    }, 3000);
+                    }, 0);
         switchQuestion();
 
     }
@@ -276,6 +276,7 @@ function handleContinueOption(text) {
 
 // Funktion zur Handhabung des Standardfalls
 function handleDefaultCase(text) {
+    let continueButton = document.querySelector('[aria-label="Continue"]');
     if (text.length >= 20) {
         text = text.substring(0, 17) + "...";
     }
@@ -283,7 +284,7 @@ function handleDefaultCase(text) {
     updateTextBoxText(text);
     updateDescriptionBoxText(description);
     setTimeout(() => {
-        updateDescriptionBoxText(selectAnswer);
+        updateDescriptionBoxText(continueButton? stateContinue: selectAnswer);
         updateTextBoxText("");}, 4000);
 }
 

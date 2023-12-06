@@ -26,7 +26,7 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["/image/cat.png"],
+      "resources": ["/image/cat.png", "/image/active_mic.png", "/image/mute_mic.png"],
       "matches": [ "https://*/*" ]
     }
   ]
