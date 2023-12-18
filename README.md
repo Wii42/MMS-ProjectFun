@@ -1,14 +1,11 @@
 # MMS-ProjectFun
 
-## Situation / Kontext
+## Quassel Prototype
 
-## Lernkarten App mit Spracherkennung
+This Chrome extension allows you to control Quizlet with voicecommands:
+1,2,3,4 for Answers
+Next&Continue for next Question
+Back for Flashcard before
+Stop for stopping recoding
 
-Mathematikaufgabe anzeigen (3+4) und dann mit Voice to text erkennen, ob das gesagte Resultat korrekt bzw. inkorrekt ist.
-
-Technologie
-CMUSphinx
-
-Fragen / Ziele
-Korrekt gesprochenes Resultat erkennen
-Inkorrektes Resultat erkennen
+[Read more](kevChromeAddOn/README.MD)
