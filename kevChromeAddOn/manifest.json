@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "Quassel",
+  "version": "1.0",
+  "description": "Control Quizlet with voice command",
+  "permissions": ["activeTab", "scripting","nativeMessaging"],
+  "action": {
+    "default_title": "Toggle Speech to Text"
+  },
+  "commands": {
+    "toggle_speech_to_text": {
+      "suggested_key": {
+        "default": "Alt+U"
+      },
+      "description": "Toggle Speech to Text"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["/image/cat.png", "/image/active_mic.png", "/image/mute_mic.png"],
+      "matches": [ "https://*/*" ]
+    }
+  ]
+}
